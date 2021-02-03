@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	_, err := Search("how do you spell christmas", "com", "en")
+	_, err := Search("Why is bahr wahbe gay", "com", "en")
 	if err != nil {
 		fmt.Println("ohno")
 	}
@@ -59,20 +59,24 @@ func parseQuery(response *http.Response) ([]GoogleResult, error){
 		return nil, err
 	}
 	results := []GoogleResult{}
+
 	sel := doc.Find("div.mod")
 	for i := range sel.Nodes {
 		item := sel.Eq(i)
-		//fmt.Println(item.Text())
-		linkTag := item.Find("a")
-		link, _ := linkTag.Attr("href")
-		titleTag := item.Find("h2")
+
 		descTag := item.Find("span")
 		desc := descTag.Text()
-		title := titleTag.Text()
-		fmt.Println("\033[37m", title)
-		fmt.Println()
 		fmt.Println(desc)
-		link = strings.Trim(link, " ")
+
+
+		fmt.Println("---------------------------")
+		title := item.Find(`[role="heading"]`)
+		titleText := title.Text()
+		fmt.Println(titleText)
+
+
+
+
 
 
 	}
