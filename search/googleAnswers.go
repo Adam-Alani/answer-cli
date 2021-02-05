@@ -21,8 +21,14 @@ func googleRequest(searchURL string) (*http.Response, error) {
 
 	request, _ := http.NewRequest("GET", searchURL, nil)
 	request.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36")
+	//request.Header.Set("Accept", "text/html")
+	//request.Header.Set("Accept-Encoding", "gzip")
+	//request.Header.Set("DNT", "1")
+
 
 	response, err := client.Do(request)
+
+	//fmt.Println(response.Header)
 
 	if err != nil {
 		return nil, err
@@ -37,6 +43,7 @@ func url(searchTerm string, countryCode string, languageCode string) string {
 	if googleBase, found := googleDomains[countryCode]; found {
 		return fmt.Sprintf("%s%s&num=100&hl=%s", googleBase, searchTerm, languageCode)
 	}
+	fmt.Printf("%s%s&num=100&hl=%s", googleDomains["com"], searchTerm, languageCode)
 	return fmt.Sprintf("%s%s&num=100&hl=%s", googleDomains["com"], searchTerm, languageCode)
 }
 
@@ -59,19 +66,27 @@ func parseQuery(response *http.Response) ([]GoogleResult, error){
 		title := item.Find(`[aria-level="3"]`)
 		titleText := title.Text()
 
+		if (len(titleText)) == 0 {
+			title = item.Find(`[role="presentation"]`)
+			titleText = title.Text()
+		}
 
 		if len(titleText) > 0 {
 			title.Contents().Each(func(i int, s *goquery.Selection) {
-				fmt.Println(s.Text())
+
+
+				fmt.Println("-----------------------------")
+				trimmedString := strings.TrimSpace(s.Text())
+				foundText := strings.Split(trimmedString, " ")
+				fmt.Println(foundText[0])
+
+
 			})
-			break;
+			//break
 		}
 		//descTag := item.Find("span")
 		//desc := descTag.Text()
 		//fmt.Println(desc)
-
-
-
 
 	}
 	return results, err

@@ -16,9 +16,12 @@ limitations under the License.
 package cmd
 
 import (
+	"answer-cli/search"
+	"fmt"
+	"github.com/fatih/color"
 	"strings"
 
-	"answer-cli/search"
+	//"answer-cli/search"
 	"github.com/spf13/cobra"
 )
 
@@ -54,7 +57,10 @@ func init() {
 
 func commandHandler(args []string) {
 	argument := strings.Join(args[1:], " ")
-	search.Google(argument , "com", "en")
+	color.Set(color.FgRed)
+	fmt.Println(argument)
+	color.Unset()
+	search.Google(argument , "fr", "en")
 }
 
 
