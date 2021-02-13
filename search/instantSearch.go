@@ -9,7 +9,6 @@ import (
 	url2 "net/url"
 	"strings"
 )
-
 func main() {
 	fetchAnswer("whats the weather in villejuif")
 
