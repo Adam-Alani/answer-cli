@@ -18,7 +18,6 @@ package cmd
 import (
 	"answer-cli/search"
 	"fmt"
-	"github.com/fatih/color"
 	"strings"
 
 	//"answer-cli/search"
@@ -56,10 +55,8 @@ func init() {
 
 
 func commandHandler(args []string) {
-	argument := strings.Join(args[1:], " ")
-	color.Set(color.FgRed)
-	fmt.Println(argument)
-	color.Unset()
+	argument := strings.Join(args[0:], " ")
+	fmt.Println("Searching for: " + argument)
 	search.Google(argument , "fr", "en")
 }
 

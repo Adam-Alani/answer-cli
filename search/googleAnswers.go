@@ -3,6 +3,7 @@ package search
 import (
 	"fmt"
 	"github.com/PuerkitoBio/goquery"
+	"github.com/fatih/color"
 	"net/http"
 	"strings"
 )
@@ -15,6 +16,8 @@ type GoogleResult struct {
 	ResultDesc string
 }
 
+
+// Sends a GET request using the search query.
 func googleRequest(searchURL string) (*http.Response, error) {
 
 	client := &http.Client{}
@@ -37,6 +40,8 @@ func googleRequest(searchURL string) (*http.Response, error) {
 }
 
 
+
+// Converts query string into a google url to get
 func url(searchTerm string, countryCode string, languageCode string) string {
 	searchTerm = strings.Trim(searchTerm, " ")
 	searchTerm = strings.Replace(searchTerm, " ", "+", -1)
@@ -48,6 +53,8 @@ func url(searchTerm string, countryCode string, languageCode string) string {
 }
 
 
+
+// Finds the instant answer in the HTML page that's fetched.
 func parseQuery(response *http.Response) ([]GoogleResult, error){
 	doc, err := goquery.NewDocumentFromReader(response.Body)
 	if err != nil {
@@ -63,6 +70,7 @@ func parseQuery(response *http.Response) ([]GoogleResult, error){
 	for i := range sel.Nodes {
 		item := sel.Eq(i)
 
+
 		title := item.Find(`[aria-level="3"]`)
 		titleText := title.Text()
 
@@ -74,15 +82,19 @@ func parseQuery(response *http.Response) ([]GoogleResult, error){
 		if len(titleText) > 0 {
 			title.Contents().Each(func(i int, s *goquery.Selection) {
 
+				s.Find(`[style="display:none"]`).Remove()
 
 				fmt.Println("-----------------------------")
-				trimmedString := strings.TrimSpace(s.Text())
-				foundText := strings.Split(trimmedString, " ")
-				fmt.Println(foundText[0])
+				color.Set(color.FgCyan)
+				fmt.Println(s.Text())
+				//trimmedString := strings.TrimSpace(s.Text())
+				//foundText := strings.Split(trimmedString, " ")
+				//fmt.Println(foundText[0])
+				color.Unset()
 
 
 			})
-			//break
+			break
 		}
 		//descTag := item.Find("span")
 		//desc := descTag.Text()
@@ -93,6 +105,8 @@ func parseQuery(response *http.Response) ([]GoogleResult, error){
 }
 
 
+
+// Main hat function that calls everything.
 func Google(searchTerm string, countryCode string, languageCode string) ([]GoogleResult, error) {
 	googleUrl := url(searchTerm, countryCode, languageCode)
 	response, err := googleRequest(googleUrl)
