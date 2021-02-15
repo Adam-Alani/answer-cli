@@ -28,7 +28,6 @@ func googleRequest(searchURL string) (*http.Response, error) {
 	//request.Header.Set("Accept-Encoding", "gzip")
 	//request.Header.Set("DNT", "1")
 
-
 	response, err := client.Do(request)
 
 	//fmt.Println(response.Header)
@@ -87,9 +86,9 @@ func parseQuery(response *http.Response) ([]GoogleResult, error){
 				fmt.Println("-----------------------------")
 				color.Set(color.FgCyan)
 				fmt.Println(s.Text())
-				//trimmedString := strings.TrimSpace(s.Text())
-				//foundText := strings.Split(trimmedString, " ")
-				//fmt.Println(foundText[0])
+				trimmedString := strings.TrimSpace(s.Text())
+				foundText := strings.Split(trimmedString, " ")
+				fmt.Println(foundText[0])
 				color.Unset()
 
 

@@ -55,7 +55,7 @@ func init() {
 
 
 func commandHandler(args []string) {
-	argument := strings.Join(args[0:], " ")
+	argument := strings.Join(args[1:], " ")
 	fmt.Println("Searching for: " + argument)
 	search.Google(argument , "fr", "en")
 }
